@@ -381,3 +381,38 @@ export const imageWithPreferred = {
   srcset:
     'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/e428bc-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 400w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/58b2ba-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 600w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/95c885-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1000w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/b3a373-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1400w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/6ceb83-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 2000w'
 }
+
+const gifAspectRatios = {
+  uncropped: {
+    instances: [
+      {
+        width: 500,
+        height: 340,
+        url:
+          'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif'
+      },
+      {
+        width: 500,
+        height: 340,
+        url:
+          'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/99bb6d-20220506-scully-eye-roll-webp500.webp'
+      }
+    ]
+  }
+}
+
+export const gif = {
+  aspect_ratios: gifAspectRatios,
+  long_caption: 'Scully Eye Roll due to Mulder',
+  short_caption: 'Scully Eye Roll',
+  width: 'full',
+  id: 'c2c452354fbff94d720ba8f86e2c71ba7427b306',
+  credit_url: '',
+  type: 'apmImage',
+  float: 'none',
+  credit: 'American Public Media',
+  fallback:
+    'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif',
+  srcset:
+    'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif 500w'
+}

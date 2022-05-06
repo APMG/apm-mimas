@@ -4,16 +4,48 @@ import { getAlt, getSrc, getSrcSet } from '../utils/utils'
 
 // Ideally, this component will take in an image object formatted by our images API and spit out an image with a proper srcset. However, I also thought I should provide a couple of fallback options, in case you want to use an image from somewhere else entirely: fallbackSrcSet and fallbackSrc. The last one will just create a normal img tag, so I really don't recommend it.
 
+function ext(url) {
+  // Remove everything to the last slash in URL
+  url = url.substr(1 + url.lastIndexOf('/'))
+
+  // Break URL at ? and take first part (file name, extension)
+  url = url.split('?')[0]
+
+  // Sometimes URL doesn't have ? but #, so we should aslo do the same for #
+  url = url.split('#')[0]
+
+  // Now we have only extension
+  return url
+}
+
 const Image = (props) => {
+  const src = getSrc(props)
+  const extension = ext(src)
+  const regexes = {
+    jpg: /jpg$/,
+    webp: /webp$/,
+    gif: /gif$/,
+    png: /png$/
+  }
   return (
-    <img
-      className={props.elementClass}
-      src={getSrc(props)}
-      alt={getAlt(props)}
-      srcSet={getSrcSet(props)}
-      sizes={props.sizes}
-      loading={props.loading}
-    />
+    <picture className={props.elementClass} data-testid="picture">
+      <source
+        type="image/webp"
+        srcSet={getSrcSet(props, regexes.webp)}
+        data-testid="webp"
+      />
+      <source
+        type={`image/${extension}`.replace(/jpg$/, 'jpeg')}
+        srcSet={getSrcSet(props, regexes[extension])}
+        data-testid="notwebp"
+      />
+      <img
+        src={src}
+        alt={getAlt(props)}
+        sizes={props.sizes}
+        loading={props.loading}
+      />
+    </picture>
   )
 }
 

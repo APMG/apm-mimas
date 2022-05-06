@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import Image from '../Image'
-import { image, imageWithPreferred } from '../../__testdata__/image'
+import { image, imageWithPreferred, gif } from '../../__testdata__/image'
 
 function defaultProps() {
   const srcSet =
@@ -28,12 +28,39 @@ function defaultProps() {
 test('creates the correct image when properly formatted image data is provided', () => {
   const expected = defaultProps()
 
-  const { getByAltText } = render(<Image image={image} />)
+  const { getByAltText, getByTestId } = render(<Image image={image} />)
 
+  const picture = getByTestId('picture')
+  const webp = getByTestId('webp')
+  const jpg = getByTestId('notwebp')
   const img = getByAltText('Stanley Turrentine Short')
 
+  expect(picture).toBeInTheDocument()
+  expect(webp).toBeInTheDocument()
   expect(img).toBeInTheDocument()
-  expect(img).toHaveAttribute(
+  expect(jpg).toHaveAttribute(
+    'srcSet',
+    expect.stringContaining(expected.srcSet)
+  )
+  expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
+})
+
+test('creates the correct gif image when properly formatted image data is provided', () => {
+  const expected = defaultProps()
+
+  console.log(gif)
+  const { getByAltText, getByTestId } = render(<Image image={gif} />)
+
+  const picture = getByTestId('picture')
+  const webp = getByTestId('webp')
+  const gif = getByTestId('notwebp')
+  const img = getByAltText('Scully Eye Roll')
+
+  expect(picture).toBeInTheDocument()
+  expect(webp).toBeInTheDocument()
+  expect(gif).toBeInTheDocument()
+  expect(img).toBeInTheDocument()
+  expect(gif).toHaveAttribute(
     'srcSet',
     expect.stringContaining(expected.srcSet)
   )
@@ -45,15 +72,25 @@ test('creates the correct image when data specifies which aspect ratio to use', 
 
   expected.srcSet =
     'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/c864f6-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/45eaad-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/163530-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/882eff-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/dcf171-20220505-stanley-turrentine-2000.jpg 2000w'
+  expected.webpSrcSet =
+    'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/1983c1-20220505-stanley-turrentine-webp400.webp 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/7e9c79-20220505-stanley-turrentine-webp600.webp 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/979ced-20220505-stanley-turrentine-webp1000.webp 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/d427ec-20220505-stanley-turrentine-webp1400.webp 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/6da01e-20220505-stanley-turrentine-webp2000.webp 2000w'
 
-  const { getByAltText } = render(<Image image={imageWithPreferred} />)
+  const { getByAltText, getByTestId } = render(
+    <Image image={imageWithPreferred} />
+  )
 
   const img = getByAltText('Stanley Turrentine Short')
+  const jpgsrc = getByTestId('notwebp')
+  const webp = getByTestId('webp')
 
   expect(img).toBeInTheDocument()
-  expect(img).toHaveAttribute(
+  expect(jpgsrc).toHaveAttribute(
     'srcSet',
     expect.stringContaining(expected.srcSet)
+  )
+  expect(webp).toHaveAttribute(
+    'srcSet',
+    expect.stringContaining(expected.webpSrcSet)
   )
   expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
 })
@@ -63,14 +100,15 @@ test('prioritizes the aspectRatio prop over the preferredAspectRatio in the data
   expected.srcSet =
     'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/1de86b-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/ea14e9-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/3fbe12-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/a93b24-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/462d74-20220505-stanley-turrentine-2000.jpg 2000w'
 
-  const { getByAltText } = render(
+  const { getByAltText, getByTestId } = render(
     <Image image={imageWithPreferred} aspectRatio="square" />
   )
 
   const img = getByAltText('Stanley Turrentine Short')
+  const jpgsrcset = getByTestId('notwebp')
 
   expect(img).toBeInTheDocument()
-  expect(img).toHaveAttribute(
+  expect(jpgsrcset).toHaveAttribute(
     'srcSet',
     expect.stringContaining(expected.srcSet)
   )
@@ -96,9 +134,7 @@ test('takes in a "sizes" string to specify image behavior based on viewport', ()
 })
 
 test('allows you to set the class with the elementClass property', () => {
-  const expected = defaultProps()
-
-  const { getByAltText } = render(
+  const { getByTestId } = render(
     <Image
       image={imageWithPreferred}
       elementClass="wazzap"
@@ -107,10 +143,9 @@ test('allows you to set the class with the elementClass property', () => {
     />
   )
 
-  const img = getByAltText('Stanley Turrentine Short')
+  const img = getByTestId('picture')
 
   expect(img).toBeInTheDocument()
-  expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
   expect(img).toHaveAttribute('class', expect.stringContaining('wazzap'))
 })
 
@@ -132,17 +167,13 @@ test('creates image when all fallbacks are provided', () => {
     'src',
     expect.stringContaining(expected.fallbackSrc)
   )
-  expect(img).toHaveAttribute(
-    'srcSet',
-    expect.stringContaining(expected.fallbackSrcSet)
-  )
   expect(img).toHaveAttribute('alt', expect.stringContaining(expected.alt))
 })
 
 test('creates image based on data when all fallbacks are also provided', () => {
   const expected = defaultProps()
 
-  const { getByAltText } = render(
+  const { getByAltText, getByTestId } = render(
     <Image
       image={image}
       fallbackSrc={expected.fallbackSrc}
@@ -150,11 +181,12 @@ test('creates image based on data when all fallbacks are also provided', () => {
     />
   )
 
+  const jpgsrc = getByTestId('notwebp')
   const img = getByAltText('Stanley Turrentine Short')
 
   expect(img).toBeInTheDocument()
   expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
-  expect(img).toHaveAttribute(
+  expect(jpgsrc).toHaveAttribute(
     'srcset',
     expect.stringContaining(expected.srcSet)
   )
