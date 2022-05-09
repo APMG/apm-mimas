@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getAlt, getSrc, getSrcSet } from '../utils/utils'
+import { getAlt, getSrc, getSrcSet, hasWebp } from '../utils/utils'
 
 // Ideally, this component will take in an image object formatted by our images API and spit out an image with a proper srcset. However, I also thought I should provide a couple of fallback options, in case you want to use an image from somewhere else entirely: fallbackSrcSet and fallbackSrc. The last one will just create a normal img tag, so I really don't recommend it.
 
@@ -21,6 +21,7 @@ function ext(url) {
 const Image = (props) => {
   const src = getSrc(props)
   const extension = ext(src)
+  const haswebp = hasWebp(props)
   const regexes = {
     jpg: /jpg$/,
     webp: /webp$/,
@@ -29,11 +30,13 @@ const Image = (props) => {
   }
   return (
     <picture className={props.elementClass} data-testid="picture">
-      <source
-        type="image/webp"
-        srcSet={getSrcSet(props, regexes.webp)}
-        data-testid="webp"
-      />
+      {haswebp && (
+        <source
+          type="image/webp"
+          srcSet={getSrcSet(props, regexes.webp)}
+          data-testid="webp"
+        />
+      )}
       <source
         type={`image/${extension}`.replace(/jpg$/, 'jpeg')}
         srcSet={getSrcSet(props, regexes[extension])}

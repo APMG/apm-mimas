@@ -72,6 +72,34 @@ test('creates the correct gif image when properly formatted image data is provid
   expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
 })
 
+test('does not output a webp source if there are not any webp instances', () => {
+  Gif.aspect_ratios.uncropped.instances.shift()
+  const expected = defaultProps()
+
+  expected.srcSet =
+    'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif 500w'
+
+  const { getByTestId } = render(<Image image={Gif} />)
+
+  let webp
+  const picture = getByTestId('picture')
+  try {
+    webp = getByTestId('webp')
+  } catch (e) {
+    return
+  }
+
+  const gif = getByTestId('notwebp')
+
+  expect(picture).toBeInTheDocument()
+  expect(webp).not.toBeInTheDocument()
+  expect(gif).toBeInTheDocument()
+  expect(gif).toHaveAttribute(
+    'srcSet',
+    expect.stringContaining(expected.srcSet)
+  )
+})
+
 test('creates the correct image when data specifies which aspect ratio to use', () => {
   const expected = defaultProps()
 

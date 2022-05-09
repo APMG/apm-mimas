@@ -21,6 +21,17 @@ const generateSrcSet = (instances, typeRegex = /jpe?g$/) => {
     .join(',')
 }
 
+export const hasWebp = (props) => {
+  const { image } = props
+  if (!image) return false
+  const flat = []
+  const as = image.aspect_ratios
+  Object.keys(as).forEach((instance) =>
+    as[instance].instances.forEach((obj) => flat.push(obj.url))
+  )
+  return flat.some((url) => /webp$/.test(url))
+}
+
 export const getSrcSet = (props, typeRegex = /jpe?g$/) => {
   if (!props) return null
 
