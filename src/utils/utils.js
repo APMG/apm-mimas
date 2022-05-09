@@ -26,9 +26,10 @@ export const hasWebp = (props) => {
   if (!image) return false
   const flat = []
   const as = image.aspect_ratios
-  Object.keys(as).forEach((instance) =>
-    as[instance].instances.forEach((obj) => flat.push(obj.url))
-  )
+  delete as['__typename']
+  Object.keys(as).forEach((instance) => {
+    as[instance]?.instances.forEach((obj) => flat.push(obj.url))
+  })
   return flat.some((url) => /webp$/.test(url))
 }
 

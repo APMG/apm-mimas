@@ -28,26 +28,24 @@ const Image = (props) => {
     gif: /gif$/,
     png: /png$/
   }
+
   return (
     <picture className={props.elementClass} data-testid="picture">
       {haswebp && (
         <source
           type="image/webp"
           srcSet={getSrcSet(props, regexes.webp)}
+          sizes={props.sizes}
           data-testid="webp"
         />
       )}
       <source
         type={`image/${extension}`.replace(/jpg$/, 'jpeg')}
         srcSet={getSrcSet(props, regexes[extension])}
+        sizes={props.sizes}
         data-testid="notwebp"
       />
-      <img
-        src={src}
-        alt={getAlt(props)}
-        sizes={props.sizes}
-        loading={props.loading}
-      />
+      <img src={src} alt={getAlt(props)} loading={props.loading} />
     </picture>
   )
 }

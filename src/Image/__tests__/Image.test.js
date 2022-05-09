@@ -151,16 +151,17 @@ test('prioritizes the aspectRatio prop over the preferredAspectRatio in the data
 test('takes in a "sizes" string to specify image behavior based on viewport', () => {
   const expected = defaultProps()
 
-  const { getByAltText } = render(
+  const { getByAltText, getByTestId } = render(
     <Image image={image} sizes="(min-width: 400px) 200px, 50vw" />
   )
 
   const img = getByAltText('Stanley Turrentine Short')
+  const webp = getByTestId('webp')
 
   expect(img).toBeInTheDocument()
 
   expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
-  expect(img).toHaveAttribute(
+  expect(webp).toHaveAttribute(
     'sizes',
     expect.stringContaining('(min-width: 400px) 200px, 50vw')
   )
