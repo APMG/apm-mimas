@@ -6,7 +6,7 @@ import { getAlt, getSrc, getSrcSet } from '../utils/utils'
 
 function ext(url) {
   // Remove everything to the last slash in URL
-  url = url.substr(1 + url.lastIndexOf('/'))
+  url = url.substr(1 + url.lastIndexOf('.'))
 
   // Break URL at ? and take first part (file name, extension)
   url = url.split('?')[0]

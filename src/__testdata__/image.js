@@ -390,12 +390,6 @@ const gifAspectRatios = {
         height: 340,
         url:
           'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif'
-      },
-      {
-        width: 500,
-        height: 340,
-        url:
-          'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/99bb6d-20220506-scully-eye-roll-webp500.webp'
       }
     ]
   }

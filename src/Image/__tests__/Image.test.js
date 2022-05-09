@@ -3,6 +3,8 @@ import { render } from '@testing-library/react'
 import Image from '../Image'
 import { image, imageWithPreferred, gif } from '../../__testdata__/image'
 
+const Gif = gif
+
 function defaultProps() {
   const srcSet =
     'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/f65067-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/53abde-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/8a177d-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/c591a6-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/f1ded5-20220505-stanley-turrentine-2000.jpg 2000w'
@@ -47,9 +49,12 @@ test('creates the correct image when properly formatted image data is provided',
 
 test('creates the correct gif image when properly formatted image data is provided', () => {
   const expected = defaultProps()
+  expected.srcSet =
+    'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif 500w'
+  expected.src =
+    'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif'
 
-  console.log(gif)
-  const { getByAltText, getByTestId } = render(<Image image={gif} />)
+  const { getByAltText, getByTestId } = render(<Image image={Gif} />)
 
   const picture = getByTestId('picture')
   const webp = getByTestId('webp')

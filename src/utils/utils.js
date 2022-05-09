@@ -28,6 +28,10 @@ export const getSrcSet = (props, typeRegex = /jpe?g$/) => {
 
   if (!image) return fallbackSrcSet || null
 
+  if (image.preferredAspectRatio) {
+    return generateSrcSet(image.preferredAspectRatio.instances, typeRegex)
+  }
+
   if (
     image.aspect_ratios &&
     determineAspectRatio(props) in image.aspect_ratios &&
@@ -37,8 +41,6 @@ export const getSrcSet = (props, typeRegex = /jpe?g$/) => {
       image.aspect_ratios[determineAspectRatio(props)].instances,
       typeRegex
     )
-  } else if (image.preferredAspectRatio) {
-    return generateSrcSet(image.preferredAspectRatio.instances, typeRegex)
   }
 
   if (image.srcset) {
