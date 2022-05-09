@@ -1,13 +1,15 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import Image from '../Image'
-import { image, imageWithPreferred } from '../../__testdata__/image'
+import { image, imageWithPreferred, gif } from '../../__testdata__/image'
+
+const Gif = gif
 
 function defaultProps() {
   const srcSet =
-    'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/uncropped/35bd3b-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 400w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/uncropped/f5db37-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 600w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/uncropped/04a63f-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1000w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/uncropped/72bc48-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1400w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/uncropped/f20034-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 2000'
+    'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/f65067-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/53abde-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/8a177d-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/c591a6-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/uncropped/f1ded5-20220505-stanley-turrentine-2000.jpg 2000w'
   const src =
-    'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/uncropped/f5db37-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg'
+    'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/45eaad-20220505-stanley-turrentine-600.jpg'
   const alt = 'Some nice lawn chairs'
   const fallbackSrc =
     'https://s3-us-west-2.amazonaws.com/s.cdpn.io/298/wolf_20131015_003_1400.jpg'
@@ -28,32 +30,100 @@ function defaultProps() {
 test('creates the correct image when properly formatted image data is provided', () => {
   const expected = defaultProps()
 
-  const { getByAltText } = render(<Image image={image} />)
+  const { getByAltText, getByTestId } = render(<Image image={image} />)
 
-  const img = getByAltText('Serena Brook opens our show at The Town Hall')
+  const picture = getByTestId('picture')
+  const webp = getByTestId('webp')
+  const jpg = getByTestId('notwebp')
+  const img = getByAltText('Stanley Turrentine Short')
 
+  expect(picture).toBeInTheDocument()
+  expect(webp).toBeInTheDocument()
   expect(img).toBeInTheDocument()
-  expect(img).toHaveAttribute(
+  expect(jpg).toHaveAttribute(
     'srcSet',
     expect.stringContaining(expected.srcSet)
   )
   expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
 })
 
+test('creates the correct gif image when properly formatted image data is provided', () => {
+  const expected = defaultProps()
+  expected.srcSet =
+    'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif 500w'
+  expected.src =
+    'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif'
+
+  const { getByAltText, getByTestId } = render(<Image image={Gif} />)
+
+  const picture = getByTestId('picture')
+  const webp = getByTestId('webp')
+  const gif = getByTestId('notwebp')
+  const img = getByAltText('Scully Eye Roll')
+
+  expect(picture).toBeInTheDocument()
+  expect(webp).toBeInTheDocument()
+  expect(gif).toBeInTheDocument()
+  expect(img).toBeInTheDocument()
+  expect(gif).toHaveAttribute(
+    'srcSet',
+    expect.stringContaining(expected.srcSet)
+  )
+  expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
+})
+
+test('does not output a webp source if there are not any webp instances', () => {
+  Gif.aspect_ratios.uncropped.instances.shift()
+  const expected = defaultProps()
+
+  expected.srcSet =
+    'https://img.apmcdn.org/dev/1c1a89e4b6dde0869d43947d7ba93a1cb1e35fe6/uncropped/451be5-20220506-scully-eye-roll-500.gif 500w'
+
+  const { getByTestId } = render(<Image image={Gif} />)
+
+  let webp
+  const picture = getByTestId('picture')
+  try {
+    webp = getByTestId('webp')
+  } catch (e) {
+    return
+  }
+
+  const gif = getByTestId('notwebp')
+
+  expect(picture).toBeInTheDocument()
+  expect(webp).not.toBeInTheDocument()
+  expect(gif).toBeInTheDocument()
+  expect(gif).toHaveAttribute(
+    'srcSet',
+    expect.stringContaining(expected.srcSet)
+  )
+})
+
 test('creates the correct image when data specifies which aspect ratio to use', () => {
   const expected = defaultProps()
 
   expected.srcSet =
-    'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/e428bc-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 400w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/58b2ba-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 600w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/95c885-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1000w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/b3a373-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1400w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/6ceb83-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 2000w'
+    'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/c864f6-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/45eaad-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/163530-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/882eff-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/dcf171-20220505-stanley-turrentine-2000.jpg 2000w'
+  expected.webpSrcSet =
+    'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/1983c1-20220505-stanley-turrentine-webp400.webp 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/7e9c79-20220505-stanley-turrentine-webp600.webp 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/979ced-20220505-stanley-turrentine-webp1000.webp 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/d427ec-20220505-stanley-turrentine-webp1400.webp 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/6da01e-20220505-stanley-turrentine-webp2000.webp 2000w'
 
-  const { getByAltText } = render(<Image image={imageWithPreferred} />)
+  const { getByAltText, getByTestId } = render(
+    <Image image={imageWithPreferred} />
+  )
 
-  const img = getByAltText('Serena Brook opens our show at The Town Hall')
+  const img = getByAltText('Stanley Turrentine Short')
+  const jpgsrc = getByTestId('notwebp')
+  const webp = getByTestId('webp')
 
   expect(img).toBeInTheDocument()
-  expect(img).toHaveAttribute(
+  expect(jpgsrc).toHaveAttribute(
     'srcSet',
     expect.stringContaining(expected.srcSet)
+  )
+  expect(webp).toHaveAttribute(
+    'srcSet',
+    expect.stringContaining(expected.webpSrcSet)
   )
   expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
 })
@@ -61,16 +131,17 @@ test('creates the correct image when data specifies which aspect ratio to use', 
 test('prioritizes the aspectRatio prop over the preferredAspectRatio in the data', () => {
   const expected = defaultProps()
   expected.srcSet =
-    'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/square/5ecd52-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 400w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/square/de193e-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 600w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/square/7cb7e2-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1000w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/square/822d4e-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1400w,https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/square/f977a8-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 2000w'
+    'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/1de86b-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/ea14e9-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/3fbe12-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/a93b24-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/462d74-20220505-stanley-turrentine-2000.jpg 2000w'
 
-  const { getByAltText } = render(
+  const { getByAltText, getByTestId } = render(
     <Image image={imageWithPreferred} aspectRatio="square" />
   )
 
-  const img = getByAltText('Serena Brook opens our show at The Town Hall')
+  const img = getByAltText('Stanley Turrentine Short')
+  const jpgsrcset = getByTestId('notwebp')
 
   expect(img).toBeInTheDocument()
-  expect(img).toHaveAttribute(
+  expect(jpgsrcset).toHaveAttribute(
     'srcSet',
     expect.stringContaining(expected.srcSet)
   )
@@ -84,9 +155,10 @@ test('takes in a "sizes" string to specify image behavior based on viewport', ()
     <Image image={image} sizes="(min-width: 400px) 200px, 50vw" />
   )
 
-  const img = getByAltText('Serena Brook opens our show at The Town Hall')
+  const img = getByAltText('Stanley Turrentine Short')
 
   expect(img).toBeInTheDocument()
+
   expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
   expect(img).toHaveAttribute(
     'sizes',
@@ -95,9 +167,7 @@ test('takes in a "sizes" string to specify image behavior based on viewport', ()
 })
 
 test('allows you to set the class with the elementClass property', () => {
-  const expected = defaultProps()
-
-  const { getByAltText } = render(
+  const { getByTestId } = render(
     <Image
       image={imageWithPreferred}
       elementClass="wazzap"
@@ -106,10 +176,9 @@ test('allows you to set the class with the elementClass property', () => {
     />
   )
 
-  const img = getByAltText('Serena Brook opens our show at The Town Hall')
+  const img = getByTestId('picture')
 
   expect(img).toBeInTheDocument()
-  expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
   expect(img).toHaveAttribute('class', expect.stringContaining('wazzap'))
 })
 
@@ -131,17 +200,13 @@ test('creates image when all fallbacks are provided', () => {
     'src',
     expect.stringContaining(expected.fallbackSrc)
   )
-  expect(img).toHaveAttribute(
-    'srcSet',
-    expect.stringContaining(expected.fallbackSrcSet)
-  )
   expect(img).toHaveAttribute('alt', expect.stringContaining(expected.alt))
 })
 
 test('creates image based on data when all fallbacks are also provided', () => {
   const expected = defaultProps()
 
-  const { getByAltText } = render(
+  const { getByAltText, getByTestId } = render(
     <Image
       image={image}
       fallbackSrc={expected.fallbackSrc}
@@ -149,11 +214,12 @@ test('creates image based on data when all fallbacks are also provided', () => {
     />
   )
 
-  const img = getByAltText('Serena Brook opens our show at The Town Hall')
+  const jpgsrc = getByTestId('notwebp')
+  const img = getByAltText('Stanley Turrentine Short')
 
   expect(img).toBeInTheDocument()
   expect(img).toHaveAttribute('src', expect.stringContaining(expected.src))
-  expect(img).toHaveAttribute(
+  expect(jpgsrc).toHaveAttribute(
     'srcset',
     expect.stringContaining(expected.srcSet)
   )

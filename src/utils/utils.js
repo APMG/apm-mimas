@@ -10,37 +10,54 @@ const determineAspectRatio = (props) => {
   }
 }
 
-const generateSrcSet = (instances) => {
-  return instances
+const generateSrcSet = (instances, typeRegex = /jpe?g$/) => {
+  let rightones = instances.map((inst) =>
+    typeRegex.test(inst.url) ? inst : null
+  )
+
+  return rightones
+    .filter(Boolean)
     .map((instance) => `${instance.url} ${instance.width}w`)
     .join(',')
 }
 
-export const getSrcSet = (props) => {
+export const hasWebp = (props) => {
+  const { image } = props
+  if (!image) return false
+  const flat = []
+  const as = image.aspect_ratios
+  Object.keys(as).forEach((instance) =>
+    as[instance].instances.forEach((obj) => flat.push(obj.url))
+  )
+  return flat.some((url) => /webp$/.test(url))
+}
+
+export const getSrcSet = (props, typeRegex = /jpe?g$/) => {
   if (!props) return null
 
   let { image, aspectRatio, fallbackSrcSet } = props
 
-  if (image) {
-    if (
-      image.aspect_ratios &&
-      determineAspectRatio(props) in image.aspect_ratios &&
-      image.aspect_ratios[aspectRatio] !== null
-    ) {
-      return generateSrcSet(
-        image.aspect_ratios[determineAspectRatio(props)].instances
-      )
-    } else if (image.preferredAspectRatio) {
-      return generateSrcSet(image.preferredAspectRatio.instances)
-    } else if (image.srcset) {
-      return image.srcset
-    } else if (fallbackSrcSet) {
-      return fallbackSrcSet
-    }
+  if (!image) return fallbackSrcSet || null
+
+  if (image.preferredAspectRatio) {
+    return generateSrcSet(image.preferredAspectRatio.instances, typeRegex)
+  }
+
+  if (
+    image.aspect_ratios &&
+    determineAspectRatio(props) in image.aspect_ratios &&
+    image.aspect_ratios[aspectRatio] !== null
+  ) {
+    return generateSrcSet(
+      image.aspect_ratios[determineAspectRatio(props)].instances,
+      typeRegex
+    )
+  }
+
+  if (image.srcset) {
+    return image.srcset
   } else if (fallbackSrcSet) {
     return fallbackSrcSet
-  } else {
-    return null
   }
 }
 
