@@ -23,7 +23,7 @@ const Image = (props) => {
   const extension = ext(src)
   const haswebp = hasWebp(props)
   const regexes = {
-    jpg: /jpg$/,
+    jpg: /jpe?g$/,
     webp: /webp$/,
     gif: /gif$/,
     png: /png$/
