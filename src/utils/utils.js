@@ -6,6 +6,9 @@ const determineAspectRatio = (props) => {
   } else if (props.image && props.image.preferred_aspect_ratio_slug) {
     return props.image.preferred_aspect_ratio_slug
   } else {
+    console.warn(
+      "We did not find the aspect ratio asked for. We are sending back 'uncropped' so you will get the uncropped aspect ratio if you have that in your graphql query and if not the fallback image."
+    )
     return 'uncropped'
   }
 }
@@ -23,13 +26,20 @@ const generateSrcSet = (instances, typeRegex = /jpe?g$/) => {
 
 export const hasWebp = (props) => {
   const { image } = props
-  if (!image) return false
   const flat = []
-  const as = image.aspect_ratios
-  delete as['__typename']
-  Object.keys(as).forEach((instance) => {
-    as[instance]?.instances.forEach((obj) => flat.push(obj.url))
-  })
+  let ars
+
+  if (!image) return false
+
+  if (image.preferredAspectRatio) {
+    image.preferredAspectRatio.instances.forEach((obj) => flat.push(obj.url))
+  } else {
+    ars = image.aspect_ratios
+    delete ars['__typename']
+    Object.keys(ars).forEach((ar) => {
+      ars[ar]?.instances.forEach((img) => flat.push(img.url))
+    })
+  }
   return flat.some((url) => /webp$/.test(url))
 }
 
