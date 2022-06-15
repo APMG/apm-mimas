@@ -104,7 +104,11 @@ export const getSrc = (props) => {
     // we can't find anything so take the first instance of the first aspect ratio.
     const instances =
       image.aspect_ratios[Object.keys(image.aspect_ratios)[0]].instances
-    return instances[0].url
+
+    // make sure we don't return a webp
+    return instances.find((img) =>
+      img.url.match(/(jpe?g|gif|png)\??(s=[0-9]+)?$/)
+    ).url
   }
 }
 
