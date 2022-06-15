@@ -98,8 +98,15 @@ export const getSrc = (props) => {
 
   if (image && image.fallback) {
     return image.fallback
-  } else {
+  } else if (fallbackSrc) {
     return fallbackSrc
+  } else {
+    // we can't find anything so take the first instance of the first aspect ratio.
+    const instances =
+      image.aspect_ratios[Object.keys(image.aspect_ratios)[0]].instances
+    const notwebp = instances.find((img) => img.url.match(/(jpe?g|gif|png)$/))
+    console.log('Matches:', notwebp)
+    return instances[0].url
   }
 }
 

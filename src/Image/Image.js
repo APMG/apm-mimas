@@ -5,17 +5,19 @@ import { getAlt, getSrc, getSrcSet, hasWebp } from '../utils/utils'
 // Ideally, this component will take in an image object formatted by our images API and spit out an image with a proper srcset. However, I also thought I should provide a couple of fallback options, in case you want to use an image from somewhere else entirely: fallbackSrcSet and fallbackSrc. The last one will just create a normal img tag, so I really don't recommend it.
 
 function ext(url) {
+  if (typeof url != 'string') return ''
+  let extension
   // Remove everything to the last slash in URL
-  url = url.substr(1 + url.lastIndexOf('.'))
+  extension = url.substr(1 + url.lastIndexOf('.'))
 
   // Break URL at ? and take first part (file name, extension)
-  url = url.split('?')[0]
+  extension = extension.split('?')[0]
 
   // Sometimes URL doesn't have ? but #, so we should aslo do the same for #
-  url = url.split('#')[0]
+  extension = extension.split('#')[0]
 
   // Now we have only extension
-  return url
+  return extension
 }
 
 const Image = (props) => {
@@ -23,10 +25,11 @@ const Image = (props) => {
   const extension = ext(src)
   const haswebp = hasWebp(props)
   const regexes = {
-    jpg: /jpe?g$/,
-    webp: /webp$/,
-    gif: /gif$/,
-    png: /png$/
+    jpg: /jpe?g\??(s=[0-9]+)?$/,
+    jpeg: /jpe?g\??(s=[0-9]+)?$/,
+    webp: /webp\??(s=[0-9]+)?$/,
+    gif: /gif\??(s=[0-9]+)?$/,
+    png: /png\??(s=[0-9]+)?$/
   }
 
   return (
