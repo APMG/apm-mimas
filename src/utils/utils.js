@@ -43,6 +43,17 @@ export const hasWebp = (props) => {
   return flat.some((url) => /webp$/.test(url))
 }
 
+export const getSpecificInstance = (
+  props,
+  aspectratio,
+  typeRegex = /jpe?g$/
+) => {
+  let { image } = props
+  if (!image.aspect_ratios[aspectratio]) return null
+
+  return generateSrcSet(image.aspect_ratios[aspectratio].instances, typeRegex)
+}
+
 export const getSrcSet = (props, typeRegex = /jpe?g$/) => {
   if (!props) return null
 
