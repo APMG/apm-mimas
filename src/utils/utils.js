@@ -106,11 +106,11 @@ export const getSrc = (props) => {
   if (!props) return []
 
   let { image, fallbackSrc } = props
+  if (!image && fallbackSrc) return fallbackSrc
+  if (!image) return []
 
   if (image && image.fallback) {
     return image.fallback
-  } else if (fallbackSrc) {
-    return fallbackSrc
   } else {
     // we can't find anything so take the first instance of the first aspect ratio.
     const instances =

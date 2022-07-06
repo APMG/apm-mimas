@@ -185,7 +185,6 @@ test('allows you to set the class with the elementClass property', () => {
 
 test('creates image when all fallbacks are provided', () => {
   const expected = defaultProps()
-
   const { getByAltText } = render(
     <Image
       fallbackSrc={expected.fallbackSrc}
