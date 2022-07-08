@@ -52,6 +52,7 @@ const Image = (props) => {
           props.media.map((med, idx) =>
             SourceEle({
               type: 'image/webp',
+              key: `webp-${idx}`,
               srcSet:
                 idx == 0
                   ? getSpecificInstance(props, props.mobileAr, regexes.webp) // only get the mobile art directed aspect ratio on the first media array item
@@ -64,6 +65,7 @@ const Image = (props) => {
         {props.media.map((med, idx) =>
           SourceEle({
             type: `image/${extension}`.replace(/jpg$/, 'jpeg'),
+            key: `nonwebp-${idx}`,
             srcSet:
               idx == 0
                 ? getSpecificInstance(props, props.mobileAr, regexes[extension])
