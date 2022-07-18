@@ -1,4 +1,5 @@
 const aspect_ratios = {
+  empty: null,
   normal: {
     instances: [
       {
@@ -349,6 +350,7 @@ const aspect_ratios = {
     ]
   }
 }
+
 export const image = {
   aspect_ratios: aspect_ratios,
   long_caption: 'Stanley Turrentine Long',
@@ -363,6 +365,18 @@ export const image = {
     'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/45eaad-20220505-stanley-turrentine-600.jpg',
   srcset:
     'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/e428bc-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 400w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/58b2ba-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 600w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/95c885-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1000w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/b3a373-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1400w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/6ceb83-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 2000w'
+}
+
+export const imageNoFallback = {
+  aspect_ratios: aspect_ratios,
+  long_caption: 'Stanley Turrentine Long',
+  short_caption: 'Stanley Turrentine Short',
+  width: 'full',
+  id: 'c2c452354fbff94d720ba8f86e2c71ba7427b306',
+  credit_url: '',
+  type: 'apmImage',
+  float: 'none',
+  credit: 'American Public Media'
 }
 
 export const imageWithPreferred = {
@@ -380,6 +394,19 @@ export const imageWithPreferred = {
     'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/45eaad-20220505-stanley-turrentine-600.jpg',
   srcset:
     'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/e428bc-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 400w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/58b2ba-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 600w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/95c885-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1000w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/b3a373-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 1400w, https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/widescreen/6ceb83-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg 2000w'
+}
+
+export const imageWithPreferredNoFallback = {
+  aspect_ratios: aspect_ratios,
+  long_caption: 'Stanley Turrentine Long',
+  short_caption: 'Stanley Turrentine Short',
+  width: 'full',
+  preferred_aspect_ratio_slug: 'portrait',
+  id: 'c2c452354fbff94d720ba8f86e2c71ba7427b306',
+  credit_url: '',
+  type: 'apmImage',
+  float: 'none',
+  credit: 'American Public Media'
 }
 
 const gifAspectRatios = {

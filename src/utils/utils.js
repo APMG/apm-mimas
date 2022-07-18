@@ -112,9 +112,19 @@ export const getSrc = (props) => {
   if (image && image.fallback) {
     return image.fallback
   } else {
-    // we can't find anything so take the first instance of the first aspect ratio.
-    const instances =
-      image.aspect_ratios[Object.keys(image.aspect_ratios)[0]].instances
+    // we can't find anything so try to use the preferred aspect ratio or the first aspect ratio that is present
+    let instances
+    if (
+      image.preferred_aspect_ratio_slug &&
+      image.aspect_ratios[image.preferred_aspect_ratio_slug]
+    ) {
+      instances =
+        image.aspect_ratios[image.preferred_aspect_ratio_slug].instances
+    } else {
+      instances =
+        Object.values(image.aspect_ratios).find((value) => value != null)
+          ?.instances || []
+    }
 
     // make sure we don't return a webp
     return instances.find((img) =>
