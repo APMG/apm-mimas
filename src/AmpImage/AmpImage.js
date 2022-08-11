@@ -9,7 +9,7 @@ const ampStyles = {
 }
 
 const AmpImage = (props) => {
-  const src = getSrc(props)
+  const fallbackImage = getSrc(props)
   const instances = getInstances(props)
   const { height, width } = instances[0] || { height: false, width: false }
 
@@ -18,7 +18,7 @@ const AmpImage = (props) => {
       <amp-img
         style={ampStyles.image}
         class={props.elementClass}
-        src={src}
+        src={fallbackImage.url}
         alt={getAlt(props)}
         srcSet={getSrcSet(props)}
         sizes={props.sizes}
@@ -33,7 +33,7 @@ const AmpImage = (props) => {
     <amp-img
       style={ampStyles.image}
       class={props.elementClass}
-      src={src}
+      src={fallbackImage.url}
       alt={getAlt(props)}
       srcSet={getSrcSet(props)}
       height={props.fallbackHeight ? props.fallbackHeight : '225'}

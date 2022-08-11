@@ -31,8 +31,8 @@ function SourceEle(props) {
 }
 
 const Image = (props) => {
-  const src = getSrc(props)
-  const extension = ext(src)
+  const fallbackImage = getSrc(props)
+  const extension = ext(fallbackImage.url)
   const haswebp = hasWebp(props)
   const regexes = {
     jpg: /jpe?g\??(s=[0-9]+)?$/,
@@ -41,6 +41,14 @@ const Image = (props) => {
     gif: /gif\??(s=[0-9]+)?$/,
     png: /png\??(s=[0-9]+)?$/
   }
+
+  const fallbackImageProps = {
+    src: fallbackImage.url,
+    loading: props.loading
+  }
+
+  if (fallbackImage.width) fallbackImageProps.width = fallbackImage.width
+  if (fallbackImage.height) fallbackImageProps.height = fallbackImage.height
 
   // We need a <source> element for each props.media for webp  and the same for non webp
   // So if there are 2 items in props.media and we have webp image there will be 3 <source> elements
@@ -75,7 +83,7 @@ const Image = (props) => {
             media: `(${med})`
           })
         )}
-        <img src={src} alt={getAlt(props)} loading={props.loading} />
+        <img {...fallbackImageProps} alt={getAlt(props)} />
       </picture>
     )
   }
@@ -96,7 +104,7 @@ const Image = (props) => {
         sizes={props.sizes}
         data-testid="notwebp"
       />
-      <img src={src} alt={getAlt(props)} loading={props.loading} />
+      <img {...fallbackImageProps} alt={getAlt(props)} />
     </picture>
   )
 }
