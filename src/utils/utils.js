@@ -6,9 +6,9 @@ const determineAspectRatio = (props) => {
   } else if (props.image && props.image.preferred_aspect_ratio_slug) {
     return props.image.preferred_aspect_ratio_slug
   } else {
-    console.warn(
-      "We did not find the aspect ratio asked for. We are sending back 'uncropped' so you will get the uncropped aspect ratio if you have that in your graphql query and if not the fallback image."
-    )
+    // console.warn(
+    //   "We did not find the aspect ratio asked for. We are sending back 'uncropped' so you will get the uncropped aspect ratio if you have that in your graphql query and if not the fallback image."
+    // )
     return 'uncropped'
   }
 }
@@ -106,11 +106,17 @@ export const getSrc = (props) => {
   if (!props) return []
 
   let { image, fallbackSrc } = props
-  if (!image && fallbackSrc) return fallbackSrc
+  if (!image && fallbackSrc) return { url: fallbackSrc }
   if (!image) return []
 
   if (image && image.fallback) {
-    return image.fallback
+    try {
+      return image.preferredAspectRatio.instances.find(
+        (inst) => inst.url == image.fallback
+      )
+    } catch {
+      return { url: image.fallback } //here we want to get the width and height of the image fallback
+    }
   } else {
     // we can't find anything so try to use the preferred aspect ratio or the first aspect ratio that is present
     let instances
@@ -127,9 +133,10 @@ export const getSrc = (props) => {
     }
 
     // make sure we don't return a webp
-    return instances.find((img) =>
+    const inst = instances.find((img) =>
       img.url.match(/(jpe?g|gif|png)\??(s=[0-9]+)?$/)
-    ).url
+    )
+    return inst
   }
 }
 

@@ -222,32 +222,39 @@ describe('getSrc', () => {
       }
     })
 
-    expect(output).toBe(
-      'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/uncropped/f5db37-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg'
-    )
+    expect(output).toEqual({
+      url:
+        'https://img.apmcdn.org/c2c452354fbff94d720ba8f86e2c71ba7427b306/uncropped/f5db37-20181220-serena-brook-opens-our-show-at-the-town-hall.jpg'
+    })
   })
 
   test('returns fallbackSrc image.fallback is not available', () => {
     let output = getSrc({ fallbackSrc: 'https://www.fillmurray.com/200/300' })
-    expect(output).toBe('https://www.fillmurray.com/200/300')
+    expect(output).toEqual({ url: 'https://www.fillmurray.com/200/300' })
   })
 
   test('returns an instance of the preferred aspect ratio if no fallback or fallbackSrc', () => {
     let output = getSrc({
       image: imageWithPreferredNoFallback
     })
-    expect(output).toBe(
-      'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/portrait/dfea86-20220505-stanley-turrentine-400.jpg'
-    )
+    expect(output).toEqual({
+      height: 500,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/portrait/dfea86-20220505-stanley-turrentine-400.jpg',
+      width: 400
+    })
   })
 
   test('returns the first instance of the first available aspect ratio if no fallback, no fallbackSrc, and no preferred aspect ratio', () => {
     let output = getSrc({
       image: imageNoFallback
     })
-    expect(output).toBe(
-      'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/normal/d2a680-20220505-stanley-turrentine-400.jpg'
-    )
+    expect(output).toEqual({
+      height: 301,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/normal/d2a680-20220505-stanley-turrentine-400.jpg',
+      width: 400
+    })
   })
 })
 
