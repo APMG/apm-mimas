@@ -47,7 +47,6 @@
   ],
   "peerDependencies": {
     "next": "^12",
-    "prop-types": "^15.7.2",
     "react": "^17"
   },
   "devDependencies": {
@@ -76,7 +75,8 @@
     "rollup-plugin-babel": "^4.3.3"
   },
   "dependencies": {
-    "loading-attribute-polyfill": "^1.5.4"
+    "loading-attribute-polyfill": "^1.5.4",
+    "prop-types": "^15.7.2"
   },
   "resolutions": {
     "ansi-regex": "^5.0.1",
