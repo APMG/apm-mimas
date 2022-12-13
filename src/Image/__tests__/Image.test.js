@@ -233,26 +233,22 @@ test('throws when provided poorly shaped image data', () => {
       'https://s3-us-west-2.amazonaws.com/s.cdpn.io/298/wolf_20131015_003_1400.jpg 1400w, https://s3-us-west-2.amazonaws.com/s.cdpn.io/298/wolf_20131015_003_700.jpg 700w, https://s3-us-west-2.amazonaws.com/s.cdpn.io/298/wolf_20131015_003_400.jpg 400w',
     alt: 4
   }
-
-  let renderDidFail = false
-
+  let didThrow = false
+  jest.spyOn(console, 'error')
   try {
     render(<Image image={badData} />)
-  } catch {
-    renderDidFail = true
+  } catch (e) {
+    didThrow = true
   }
 
-  expect(renderDidFail).toBeTruthy()
+  expect(console.error).toHaveBeenCalled()
+  expect(didThrow).toBe(true)
 })
 
 test('throws when when no props are provided', () => {
-  let renderDidFail = false
+  jest.spyOn(console, 'error')
 
-  try {
-    render(<Image />)
-  } catch {
-    renderDidFail = true
-  }
+  render(<Image />)
 
-  expect(renderDidFail).toBeTruthy()
+  expect(console.error).toHaveBeenCalled()
 })
