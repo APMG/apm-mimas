@@ -5,7 +5,70 @@ import {
   imageWithPreferredNoFallback,
   imageNoFallback
 } from '../../__testdata__/image'
-
+let preferredExpected = {
+  instances: [
+    {
+      height: 225,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/c864f6-20220505-stanley-turrentine-400.jpg',
+      width: 400
+    },
+    {
+      height: 225,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/1983c1-20220505-stanley-turrentine-webp400.webp',
+      width: 400
+    },
+    {
+      height: 337,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/45eaad-20220505-stanley-turrentine-600.jpg',
+      width: 600
+    },
+    {
+      height: 337,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/7e9c79-20220505-stanley-turrentine-webp600.webp',
+      width: 600
+    },
+    {
+      height: 562,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/163530-20220505-stanley-turrentine-1000.jpg',
+      width: 1000
+    },
+    {
+      height: 562,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/979ced-20220505-stanley-turrentine-webp1000.webp',
+      width: 1000
+    },
+    {
+      height: 786,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/882eff-20220505-stanley-turrentine-1400.jpg',
+      width: 1400
+    },
+    {
+      height: 786,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/d427ec-20220505-stanley-turrentine-webp1400.webp',
+      width: 1400
+    },
+    {
+      height: 1124,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/dcf171-20220505-stanley-turrentine-2000.jpg',
+      width: 2000
+    },
+    {
+      height: 1124,
+      url:
+        'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/6da01e-20220505-stanley-turrentine-webp2000.webp',
+      width: 2000
+    }
+  ]
+}
 // test getSrcSet
 describe('getSrcSet', () => {
   test('returns null if no image object or fallbackSrcSet is provided', () => {
@@ -44,9 +107,18 @@ describe('getSrcSet', () => {
   })
 
   test('generates the correct srcset if there is a preferred aspect ratio in the image data', () => {
-    let expected =
+    const expected =
       'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/c864f6-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/45eaad-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/163530-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/882eff-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/dcf171-20220505-stanley-turrentine-2000.jpg 2000w'
-    let props = { image: imageWithPreferred }
+    imageWithPreferred.preferredAspectRatio = {}
+    imageWithPreferred.preferredAspectRatio.instances =
+      imageWithPreferred.aspect_ratios['widescreen'].instances
+
+    imageWithPreferred.preferredAspectRatio.slug = 'widescreen'
+    delete imageWithPreferred.aspect_ratios
+
+    let props = {
+      image: imageWithPreferred
+    }
     let output = getSrcSet(props)
 
     expect(output).toBe(expected)
@@ -54,7 +126,7 @@ describe('getSrcSet', () => {
 
   test('prioritizes the aspectRatio prop if there is a preferred aspect ratio in the image data', () => {
     let expected =
-      'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/1de86b-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/ea14e9-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/3fbe12-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/a93b24-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/462d74-20220505-stanley-turrentine-2000.jpg 2000w'
+      'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/c864f6-20220505-stanley-turrentine-400.jpg 400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/45eaad-20220505-stanley-turrentine-600.jpg 600w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/163530-20220505-stanley-turrentine-1000.jpg 1000w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/882eff-20220505-stanley-turrentine-1400.jpg 1400w,https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/widescreen/dcf171-20220505-stanley-turrentine-2000.jpg 2000w'
     let props = { image: imageWithPreferred, aspectRatio: 'square' }
     let output = getSrcSet(props)
 
@@ -134,80 +206,22 @@ describe('getInstances', () => {
         height: 1124
       }
     ]
-    let output = getInstances({ image: imageWithPreferred })
+
+    let output = getInstances({
+      image: imageWithPreferred,
+      aspectRatio: 'widescreen'
+    })
 
     expect(output).toMatchObject(expected)
   })
 
   test('returns the instances for a different aspect ratio if another is requested', () => {
-    let expected = [
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/1de86b-20220505-stanley-turrentine-400.jpg',
-        width: 400,
-        height: 400
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/f55d73-20220505-stanley-turrentine-webp400.webp',
-        width: 400,
-        height: 400
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/ea14e9-20220505-stanley-turrentine-600.jpg',
-        width: 600,
-        height: 600
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/09d448-20220505-stanley-turrentine-webp600.webp',
-        width: 600,
-        height: 600
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/3fbe12-20220505-stanley-turrentine-1000.jpg',
-        width: 1000,
-        height: 1000
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/1db9e7-20220505-stanley-turrentine-webp1000.webp',
-        width: 1000,
-        height: 1000
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/a93b24-20220505-stanley-turrentine-1400.jpg',
-        width: 1400,
-        height: 1400
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/6e6e10-20220505-stanley-turrentine-webp1400.webp',
-        width: 1400,
-        height: 1400
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/462d74-20220505-stanley-turrentine-2000.jpg',
-        width: 2000,
-        height: 2000
-      },
-      {
-        url:
-          'https://img.apmcdn.org/dev/93c76a3c3b11eaba504505deb939109ec8506b60/square/dd0e94-20220505-stanley-turrentine-webp2000.webp',
-        width: 2000,
-        height: 2000
-      }
-    ]
     let output = getInstances({
       image: imageWithPreferred,
-      aspectRatio: 'square'
+      aspectRatio: 'widescreen'
     })
 
-    expect(output).toMatchObject(expected)
+    expect(output).toEqual(preferredExpected.instances)
   })
 })
 

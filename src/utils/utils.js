@@ -49,7 +49,11 @@ export const getSpecificInstance = (
   typeRegex = /jpe?g$/
 ) => {
   let { image } = props
-  if (!image.aspect_ratios[aspectratio]) return null
+  if (!image.aspect_ratios && image.preferredAspectRatio) {
+    return generateSrcSet(image.preferredAspectRatio.instances, typeRegex)
+  }
+  if (!image.aspect_ratios[aspectratio] && !image.preferredAspectRatio)
+    return null
 
   return generateSrcSet(image.aspect_ratios[aspectratio].instances, typeRegex)
 }
