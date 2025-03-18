@@ -1,7 +1,7 @@
 {
   "name": "@apmg/mimas",
   "description": "A React component that takes an image endpoint from APM's APIs and returns a proper image with srcset.",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "license": "MIT",
@@ -9,10 +9,11 @@
     "dist",
     "README.md"
   ],
+  "import": "json",
   "keywords": [
     "image",
     "react",
-    "apm",
+    "apmg",
     "media"
   ],
   "repository": {
@@ -82,6 +83,12 @@
     "ansi-regex": "^5.0.1",
     "json-schema": "^0.4.0",
     "minimatch": "^3.0.5",
-    "node-notifier": "^8.0.1"
+    "node-notifier": "^8.0.1",
+    "semver": ">=6.3.1",
+    "cross-spawn": ">=6.0.6",
+    "json5": ">=2.2.2",
+    "braces": "3.0.3",
+    "@babel/traverse" : ">=7.23.2",
+    "ws": ">=7.5.10"
   }
 }
