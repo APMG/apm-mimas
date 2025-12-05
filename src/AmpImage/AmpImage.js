@@ -90,6 +90,7 @@ AmpImage.propTypes = {
   sizes: PropTypes.string,
   fallbackHeight: PropTypes.string,
   fallbackWidth: PropTypes.string,
+  fetchPriority: PropTypes.string,
   mustProvideOne: function(props) {
     if (!props['image'] && !props['fallbackSrc']) {
       return new Error(

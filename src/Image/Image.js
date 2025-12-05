@@ -49,7 +49,8 @@ const Image = (props) => {
 
   if (fallbackImage.width) fallbackImageProps.width = fallbackImage.width
   if (fallbackImage.height) fallbackImageProps.height = fallbackImage.height
-
+  if (props.fetchPriority)
+    fallbackImageProps.fetchPriority = props.fetchPriority
   // We need a <source> element for each props.media for webp  and the same for non webp
   // So if there are 2 items in props.media and we have webp image there will be 3 <source> elements
 
@@ -154,6 +155,7 @@ Image.propTypes = {
   alt: PropTypes.string,
   sizes: PropTypes.string,
   loading: PropTypes.string,
+  fetchPriority: PropTypes.string,
   media: PropTypes.array,
   mobileAr: PropTypes.string,
   mustProvideOne: function(props) {
