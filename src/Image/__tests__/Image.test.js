@@ -225,6 +225,37 @@ test('creates image based on data when all fallbacks are also provided', () => {
   )
 })
 
+test('applies correct aspect-ratio style to fallback img for each known aspect ratio', () => {
+  const cases = [
+    ['widescreen', '16 / 9'],
+    ['normal', '4 / 3'],
+    ['square', '1 / 1'],
+    ['portrait', '8 / 10'],
+    ['thumbnail', '4 / 3']
+  ]
+
+  cases.forEach(([aspectRatio, expectedRatio]) => {
+    const { getByAltText, unmount } = render(
+      <Image image={image} aspectRatio={aspectRatio} />
+    )
+    expect(getByAltText('Stanley Turrentine Short').style.aspectRatio).toBe(
+      expectedRatio
+    )
+    unmount()
+  })
+})
+
+test('does not apply aspect-ratio style when aspectRatio is uncropped or omitted', () => {
+  const { getByAltText: getByAltText1, unmount: unmount1 } = render(
+    <Image image={image} aspectRatio="uncropped" />
+  )
+  expect(getByAltText1('Stanley Turrentine Short')).not.toHaveAttribute('style')
+  unmount1()
+
+  const { getByAltText: getByAltText2 } = render(<Image image={image} />)
+  expect(getByAltText2('Stanley Turrentine Short')).not.toHaveAttribute('style')
+})
+
 // FAILURES
 
 test('throws when provided poorly shaped image data', () => {
