@@ -245,15 +245,30 @@ test('applies correct aspect-ratio style to fallback img for each known aspect r
   })
 })
 
-test('does not apply aspect-ratio style when aspectRatio is uncropped or omitted', () => {
-  const { getByAltText: getByAltText1, unmount: unmount1 } = render(
-    <Image image={image} aspectRatio="uncropped" />
-  )
-  expect(getByAltText1('Stanley Turrentine Short')).not.toHaveAttribute('style')
-  unmount1()
+test('applies runtime aspect-ratio style to fallback img when aspectRatio is uncropped', () => {
+  const uncroppedImage = {
+    preferredAspectRatio: {
+      instances: [
+        {
+          url: 'https://img.apmcdn.org/test/uncropped/photo-400.jpg',
+          width: 400,
+          height: 300
+        }
+      ]
+    },
+    fallback: 'https://img.apmcdn.org/test/uncropped/photo-400.jpg',
+    short_caption: 'Test Uncropped'
+  }
 
-  const { getByAltText: getByAltText2 } = render(<Image image={image} />)
-  expect(getByAltText2('Stanley Turrentine Short')).not.toHaveAttribute('style')
+  const { getByAltText } = render(
+    <Image image={uncroppedImage} aspectRatio="uncropped" />
+  )
+  expect(getByAltText('Test Uncropped').style.aspectRatio).toBe('400 / 300')
+})
+
+test('does not apply aspect-ratio style when aspectRatio is omitted', () => {
+  const { getByAltText } = render(<Image image={image} />)
+  expect(getByAltText('Stanley Turrentine Short')).not.toHaveAttribute('style')
 })
 
 // FAILURES

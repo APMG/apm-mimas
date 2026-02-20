@@ -63,6 +63,14 @@ const Image = (props) => {
     fallbackImageProps.style = {
       aspectRatio: aspectRatioCssMap[props.aspectRatio]
     }
+  } else if (
+    props.aspectRatio === 'uncropped' &&
+    fallbackImage.width &&
+    fallbackImage.height
+  ) {
+    fallbackImageProps.style = {
+      aspectRatio: `${fallbackImage.width} / ${fallbackImage.height}`
+    }
   }
 
   // We need a <source> element for each props.media for webp  and the same for non webp
