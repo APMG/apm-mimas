@@ -51,6 +51,28 @@ const Image = (props) => {
   if (fallbackImage.height) fallbackImageProps.height = fallbackImage.height
   if (props.fetchPriority)
     fallbackImageProps.fetchPriority = props.fetchPriority
+
+  const aspectRatioCssMap = {
+    widescreen: '16 / 9',
+    normal: '4 / 3',
+    square: '1 / 1',
+    portrait: '8 / 10',
+    thumbnail: '4 / 3'
+  }
+  if (props.aspectRatio && aspectRatioCssMap[props.aspectRatio]) {
+    fallbackImageProps.style = {
+      aspectRatio: aspectRatioCssMap[props.aspectRatio]
+    }
+  } else if (
+    props.aspectRatio === 'uncropped' &&
+    fallbackImage.width &&
+    fallbackImage.height
+  ) {
+    fallbackImageProps.style = {
+      aspectRatio: `${fallbackImage.width} / ${fallbackImage.height}`
+    }
+  }
+
   // We need a <source> element for each props.media for webp  and the same for non webp
   // So if there are 2 items in props.media and we have webp image there will be 3 <source> elements
 
